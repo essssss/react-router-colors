@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { useState } from "react";
+import { BrowserRouter, Link, NavLink } from "react-router-dom";
+import Routes from "./Routes";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [colors, setColors] = useState([
+        { name: "red", code: "rgb(255,0,0)" },
+        { name: "green", code: "rgb(0,255,0)" },
+        { name: "blue", code: "rgb(0,0,255)" },
+    ]);
+    const addColor = (newColor) => {
+        setColors((colors) => [...colors, { ...newColor }]);
+    };
+    const colorLinks = colors.map((color) => (
+        <>
+            <NavLink key={color.name} to={`/colors/${color.name}`}>
+                {color.name}
+            </NavLink>
+            <br />
+        </>
+    ));
+    return (
+        <div className="App">
+            <BrowserRouter>
+                <Link to={"/colors/new"}>Add a new color!</Link>
+                <br />
+                {colorLinks}
+                <Routes colors={colors} addColor={addColor} />
+            </BrowserRouter>
+        </div>
+    );
 }
 
 export default App;
